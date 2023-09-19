@@ -3,9 +3,9 @@ const path = require('path');
 
 const createChildren = async () => {
     try {
-        await fsPromises.mkdir(path.resolve('hw1'));
+        await fsPromises.mkdir(path.resolve('hw1'), {recursive: true});
         for (let i = 1; i <= 5; i++) {
-            await fsPromises.mkdir(path.resolve('hw1', `child${i}`));
+            await fsPromises.mkdir(path.resolve('hw1', `child${i}`), {recursive: true});
             await fsPromises.writeFile(path.resolve('hw1', `file${i}.txt`), '')
         }
         console.log('dir hw1 with children was created');
