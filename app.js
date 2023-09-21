@@ -8,13 +8,25 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
-app.get('/', async (req, res) => {
+app.get('/users', async (req, res) => {
     const db = await readDB();
     res.status(200)
         .json(db);
 });
 
-app.post('/', async (req, res) => {
+app.get('/users/:id', async(req, res) => {
+    const db = await readDB();
+    let {id} = req.params;
+    id = +id;
+
+    if(id > 0 && id <= db.length - 1) {
+        res.status(200).json({results: db[id - 1]});
+    } else {
+        res.status(404).json({results: 'user has not been found'});
+    }
+})
+
+app.post('/users', async (req, res) => {
     const db = await readDB();
     const newUser = req.body;
     const isValid = await validator(newUser);
@@ -30,7 +42,7 @@ app.post('/', async (req, res) => {
     }
 });
 
-app.put('/:id', async (req, res) => {
+app.put('/users/:id', async (req, res) => {
     const db = await readDB();
     let {id} = req.params;
     id = +id;
@@ -53,7 +65,7 @@ app.put('/:id', async (req, res) => {
     }
 });
 
-app.delete('/:id', async(req, res) => {
+app.delete('/users/:id', async(req, res) => {
     const db = await readDB();
     const {id} = req.params;
 
